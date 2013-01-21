@@ -4,10 +4,33 @@ export TEMPLATE=template.tpl
 : ${DOCROOT:=$PWD}
 
 case "${1:-}" in
+	index)
+		INDEX=index.md
+		INDEX_TEMPLATE="${INDEX%.md}.head"
+		test -s "$INDEX_TEMPLATE" && \
+			cat "$INDEX_TEMPLATE" > "$INDEX" || \
+			cat <<-"EOF" > "$INDEX"
+			% Table of contents
+			%
+			%
+
+			# Contents
+
+			EOF
+		find -L "$DOCROOT" -name \*.md ! -name "$INDEX" -type f -print0 | \
+			xargs -r0 -n1 \
+			awk -v DR="$DOCROOT" 'NR==1{
+				sub("% ","",$0)
+				sub(DR,"",FILENAME)
+				sub(".md$",".html",FILENAME)
+				printf "- [%s](%s)\n",$0,FILENAME
+			}' >> "$INDEX"
+		;;
 	clean)
 		exec find -L "$DOCROOT" -name \*.html -type f -print -delete
 		;;
 	all)
+		$0 index
 		find -L "$DOCROOT" -name \*.md -type f -print0 | \
 			xargs -r0 -n1 -P10 $0
 		;;
@@ -29,8 +52,9 @@ case "${1:-}" in
 
 		Actions supported:
 
-		 - all: process all .md files
-		 - clean: remove ALL .html files (be careful!)
+		- index: create index file automatically
+		- all: process all .md files (and refresh autoindex)
+		- clean: remove ALL .html files (be careful!)
 
 		DOCROOT environment variable is looked for files, otherwise,
 		PWD is used
