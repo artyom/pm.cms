@@ -30,7 +30,6 @@ case "${1:-}" in
 		exec find -L "$DOCROOT" -name \*.html -type f -print -delete
 		;;
 	all)
-		$0 index
 		find -L "$DOCROOT" -name \*.md -type f -print0 | \
 			xargs -r0 -n1 -P10 $0
 		;;
@@ -52,8 +51,8 @@ case "${1:-}" in
 
 		Actions supported:
 
-		- index: create index file automatically
-		- all: process all .md files (and refresh autoindex)
+		- all: process all .md files (but not index)
+		- index: create index file (list appended to index.head)
 		- clean: remove ALL .html files (be careful!)
 
 		DOCROOT environment variable is looked for files, otherwise,
