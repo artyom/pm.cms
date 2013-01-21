@@ -47,7 +47,7 @@ case "${1:-}" in
 			test "$INFILE" -ot "$OUTFILE" && \
 			test "$TEMPLATE" -ot "$OUTFILE" && exit 0
 		printf '%s\t=>\t%s\n' "$INFILE" "$OUTFILE"
-		exec theme -C -toc -E -t "$TEMPLATE" -o "$OUTFILE" "$INFILE"
+		exec theme -c footnotes,notoc -E -t "$TEMPLATE" -o "$OUTFILE" "$INFILE"
 		;;
 	*)
 		cat <<-EOF >&2
