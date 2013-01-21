@@ -50,7 +50,7 @@ case "${1:-}" in
 		exec theme -C -toc -E -t "$TEMPLATE" -o "$OUTFILE" "$INFILE"
 		;;
 	*)
-		cat <<-EOF >&2 ; exit 1
+		cat <<-EOF >&2
 		Usage:
 		${0##*/} ACTION | filename.md
 
@@ -63,5 +63,6 @@ case "${1:-}" in
 		DOCROOT environment variable is looked for files, otherwise,
 		PWD is used
 		EOF
+		exit 1
 		;;
 esac
