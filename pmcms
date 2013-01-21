@@ -5,6 +5,11 @@ export TEMPLATE=template.tpl
 
 case "${1:-}" in
 	index)
+		test -e "$DOCROOT/.autoindex" || {
+			echo "Create empty .autoindex file in $DOCROOT" >&2
+			echo "to confirm you want to create index.md automatically" >&2
+			exit 2
+		}
 		INDEX=index.md
 		INDEX_TEMPLATE="${INDEX%.md}.head"
 		test -s "$INDEX_TEMPLATE" && \
