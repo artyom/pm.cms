@@ -1,0 +1,39 @@
+#!/bin/sh -eu
+
+export TEMPLATE=template.tpl
+: ${DOCROOT:=$PWD}
+
+case "${1:-}" in
+	clean)
+		exec find -L "$DOCROOT" -name \*.html -type f -print -delete
+		;;
+	all)
+		find -L "$DOCROOT" -name \*.md -type f -print0 | \
+			xargs -r0 -n1 -P10 $0
+		;;
+	*.md)
+		INFILE="$1"
+		OUTFILE="${INFILE%md}html"
+		test -s "${INFILE%md}tpl" && TEMPLATE="${INFILE%md}tpl"
+		# exit if output is already up to date
+		test -f "$OUTFILE" && \
+			test "$INFILE" -ot "$OUTFILE" && \
+			test "$TEMPLATE" -ot "$OUTFILE" && exit 0
+		printf '%s\t=>\t%s\n' "$INFILE" "$OUTFILE"
+		exec theme -E -t "$TEMPLATE" -o "$OUTFILE" "$INFILE"
+		;;
+	*)
+		cat <<-EOF >&2 ; exit 1
+		Usage:
+		${0##*/} ACTION | filename.md
+
+		Actions supported:
+
+		 - all: process all .md files
+		 - clean: remove ALL .html files (be careful!)
+
+		DOCROOT environment variable is looked for files, otherwise,
+		PWD is used
+		EOF
+		;;
+esac
