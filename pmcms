@@ -31,7 +31,7 @@ case "${1:-}" in
 				printf "- [%s](%s)\n",$0,FILENAME
 			}' >> "$INDEX"
 		;;
-	clean)
+	clean|clear)
 		exec find -L "$DOCROOT" -name \*.html -type f -print -delete
 		;;
 	all)
