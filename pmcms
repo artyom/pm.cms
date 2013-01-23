@@ -34,6 +34,10 @@ case "${1:-}" in
 	clean|clear)
 		exec find -L "$DOCROOT" -name \*.html -type f -print -delete
 		;;
+	gc)
+		exec find -L "$DOCROOT" -name \*.html -type f -exec \
+			sh -c 'f="{}";test -f "${f%html}md"||rm -v -- "$f"' \;
+		;;
 	all)
 		find -L "$DOCROOT" -name \*.md -type f -print0 | \
 			xargs -r0 -n1 -P10 $0
@@ -59,6 +63,8 @@ case "${1:-}" in
 		- all: process all .md files (but not index)
 		- index: create index file (list appended to index.head)
 		- clean: remove ALL .html files (be careful!)
+		- gc: collect garbage (remove .html files with no
+		  corresponding .md files)
 
 		DOCROOT environment variable is looked for files, otherwise,
 		PWD is used

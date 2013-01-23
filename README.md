@@ -13,6 +13,8 @@ This tiny tool can be handy if you want to convert a bunch of [markdown][] files
 	- all: process all .md files (but not index)
 	- index: create index file (list appended to index.head)
 	- clean: remove ALL .html files (be careful!)
+	- gc: collect garbage (remove .html files with no
+	  corresponding .md files)
 	
 	DOCROOT environment variable is looked for files, otherwise,
 	PWD is used
@@ -46,6 +48,10 @@ Clear all html files:
 Automatically create `index.md` file and update/create html pages:
 
 	pmcms index && pmcms all
+
+Remove old html files if you already removed its [markdown][] sources:
+
+	pmcms gc
 
 * * *
 
