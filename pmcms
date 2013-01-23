@@ -10,8 +10,8 @@ case "${1:-}" in
 			echo "to confirm you want to create index.md automatically" >&2
 			exit 2
 		}
-		INDEX=index.md
-		INDEX_TEMPLATE="${INDEX%.md}.head"
+		INDEX="$DOCROOT/index.md"
+		INDEX_TEMPLATE="$DOCROOT/${INDEX%.md}.head"
 		test -s "$INDEX_TEMPLATE" && \
 			cat "$INDEX_TEMPLATE" > "$INDEX" || \
 			cat <<-"EOF" > "$INDEX"
